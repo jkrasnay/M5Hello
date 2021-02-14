@@ -79,3 +79,7 @@ The upload should take a few seconds, after which the Core2 should restart and d
 
 A more up-to-date guide:
 * https://www.dellascolto.com/bitwise/category/m5stack/
+
+
+
+Copyright John Krasnay. This software licensed under the link:LICENSE.md[MIT license].
