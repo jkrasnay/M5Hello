@@ -1,0 +1,81 @@
+= Getting Started on the M5Stack Core2
+
+This is a short guide to getting the M5Stack Core2 running on MacOS Catalina.
+
+== Setting Up the Environment
+
+The following commands get us set up with `arduino-cli`
+
+----
+brew install arduino-cli
+arduino-cli config init
+vi ~/Library/Arduino15/arduino-cli.yaml   # add board download URLs as below
+----
+
+(TODO: describe how to install the USB driver for MacOS)
+
+We need URLs so arduino-cli knows about ESP32 boards.
+See https://conferre.cf/arduino/cli.php
+
+----
+board_manager:
+  additional_urls:
+  - https://m5stack.oss-cn-shenzhen.aliyuncs.com/resource/arduino/package_m5stack_index.json
+----
+
+Now we can install the required tooling for ESP32.
+
+----
+arduino-cli core update-index
+arduino-cli core search                 # see that m5stack:esp32 is available
+arduino-cli core install m5stack:esp32
+arduino-cli board listall               # see that M5Stack-Core2 is available
+----
+
+We'll need the M5Core2 library to be installed
+
+----
+arduino-cli lib install M5Core2
+----
+
+== Compiling the Sketch
+
+Now compile the sketch from the `M5Hello` directory:
+
+----
+arduino-cli compile --fqbn m5stack:esp32:m5stack-core2
+----
+
+== Installing the Sketch
+
+Run the following _without_ the Core2 plugged into USB:
+
+----
+arduino-cli board list
+----
+
+Now, plug the Core2 into USB and run the command again. In my case, the second run produced the following additional lines:
+
+----
+Port                            Type              Board Name FQBN Core
+/dev/cu.SLAB_USBtoUART          Serial Port (USB) Unknown
+/dev/cu.usbserial-01F9709F      Serial Port (USB) Unknown
+----
+
+It's OK that `arduino-cli` doesn't know the board type. It just means we have to specify it when we upload.
+
+----
+arduino-cli upload --fqbn esp32:esp32:m5stack-core-esp32 --port /dev/cu.SLAB_USBtoUART
+----
+
+The upload should take a few seconds, after which the Core2 should restart and display "Hello, world!" in _tiny little letters_.
+
+== Resources
+
+* https://arduino.github.io/arduino-cli/latest/
+* https://conferre.cf/arduino/cli.php
+* https://community.m5stack.com/topic/2339/new-core2-appears-to-not-be-working-properly/2
+* https://forum.arduino.cc/index.php?topic=680595.0
+
+A more up-to-date guide:
+* https://www.dellascolto.com/bitwise/category/m5stack/
